@@ -135,7 +135,23 @@
                     </ul>
                 </div>
                 <div class="bs-example col-md-4" style="margin-left: 20px;">
-                    <ul class="list-group sortable" id="uIssue_list"></ul>
+                    <ul class="list-group sortable" id="uIssue_list">
+
+                        @foreach (var item in Model.UnderIssues.Where(n => !n.IsFinished))
+                        {
+                            <li class="list-group-item row" data-id="@item.Id">
+                                <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span>
+                                <label class="col-md-10"><input type="checkbox">@item.Text</label>
+                            </li>
+                        }
+                        @foreach (var item in Model.UnderIssues.Where(n => n.IsFinished))
+                        {
+                            <li class="list-group-item row disabled" data-id="@item.Id">
+                                <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span>
+                                <label class="col-md-10"><input type="checkbox">@item.Text</label>
+                            </li>
+                        }
+                    </ul>
                 </div>
 
             </div>

@@ -10,7 +10,7 @@ namespace LetsDo.DataAccess
 {
     public class UnitOfWork : IDisposable
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private IssueRepository _issueRepository;
         private UnderIssueRepository _underIssueRepository;
         private CategoryRepository _categoryRepository;

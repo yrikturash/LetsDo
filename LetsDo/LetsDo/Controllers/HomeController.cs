@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using LetsDo.DataAccess;
 using LetsDo.DataAccess.Entities;
 using LetsDo.DTO.ViewModels;
+using WebGrease.Css.Extensions;
 
 namespace LetsDo.Controllers
 {
@@ -23,16 +24,16 @@ namespace LetsDo.Controllers
         [HttpGet]
         public ActionResult Index(int? categoryId = null)
         {
-                var issues = (categoryId.HasValue) ?                     
-                    _unitOfWork.Issues.GetAll().Where(n => n.CategoryId == categoryId).OrderByDescending(n => n.CreatedTime).ToList() :
-                    _unitOfWork.Issues.GetAll().OrderByDescending(n => n.CreatedTime).ToList();
+            var issues = (categoryId.HasValue) ?                     
+                _unitOfWork.Issues.GetAll().Where(n => n.CategoryId == categoryId).OrderByDescending(n => n.CreatedTime).ToList() :
+                _unitOfWork.Issues.GetAll().OrderByDescending(n => n.CreatedTime).ToList();
 
-                IList<UnderIssue> uIssuesList = new List<UnderIssue>();
-                if (issues.Count > 0)
-                {
-                    var id = _unitOfWork.Issues.Get(0).Id;
-                    uIssuesList = _unitOfWork.UnderIssues.GetAll().Where(n => n.IssueId == id).ToList();
-                }
+            IList<UnderIssue> uIssuesList = new List<UnderIssue>();
+            if (issues.Count > 0)
+            {
+                var id = issues.First().Id;
+                uIssuesList = _unitOfWork.UnderIssues.GetAll().Where(n => n.IssueId == id).ToList();
+            }
             return View(new IndexViewModel()
             {
                 Issues = issues,
@@ -80,7 +81,9 @@ namespace LetsDo.Controllers
 
             _unitOfWork.UnderIssues.Create(uissue);
 
-            return Json(_unitOfWork.UnderIssues.GetAll().First(n => n.IssueId == id && n.Id == _unitOfWork.UnderIssues.GetAll().Max(k => k.Id)));
+            _unitOfWork.Save();
+
+            return Json(_unitOfWork.UnderIssues.GetAll().OrderByDescending(n => n.Id).First(n => n.IssueId == id));
         }
 
         [HttpGet]

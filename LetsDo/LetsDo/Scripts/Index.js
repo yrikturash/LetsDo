@@ -126,9 +126,9 @@ $("body").on("click", "#issue_list li input", function () {
         /*------------ Do changes in database --------------*/
         $.ajax({
             cache: false,
-            type: "GET",
+            type: "PUT",
             url: '/Home/SetDoneIssue',
-            data: { 'id': id },
+            data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
                 $('#uIssue_list').empty();
@@ -157,9 +157,9 @@ $("body").on("click", "#issue_list li input", function () {
         /*------------ Do changes in database --------------*/
         $.ajax({
             cache: false,
-            type: "GET",
+            type: "PUT",
             url: '/Home/UnfinishIssue',
-            data: { 'id': id },
+            data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
                 li.click();
@@ -209,9 +209,9 @@ $("body").on("click", "#uIssue_list li input", function () {
         /*------------ Do changes in database --------------*/
         $.ajax({
             cache: false,
-            type: "GET",
+            type: "PUT",
             url: '/Home/SetDoneUIssue',
-            data: { 'id': id },
+            data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
 
@@ -271,7 +271,7 @@ $("body").on("click", "#remove_completed", function () {
     $.ajax({
         url: '/Home/RemoveCompletedIssues',
         data: JSON.stringify({ 'ids': ids }),
-        type: 'POST',
+        type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         complete: function () {
 
@@ -296,7 +296,7 @@ $("body").on("click", "#remove_completed2", function () {
     $.ajax({
         url: '/Home/RemoveCompletedUIssues',
         data: JSON.stringify({ 'ids': ids }),
-        type: 'POST',
+        type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         complete: function () {
 
@@ -343,7 +343,7 @@ $("body").on("click", ".remove_category", function (e) {
     $.ajax({
         url: '/Home/RemoveCategory',
         data: JSON.stringify({ 'id': id }),
-        type: 'POST',
+        type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         complete: function () {
 
