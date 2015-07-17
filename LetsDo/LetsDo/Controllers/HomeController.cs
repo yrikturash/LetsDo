@@ -11,7 +11,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace LetsDo.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, User")]
     public class HomeController : Controller
     {
         private readonly UnitOfWork _unitOfWork;

@@ -2,6 +2,7 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using  Owin.Security.Providers.LinkedIn;
 
 namespace LetsDo
 {
@@ -33,6 +34,14 @@ namespace LetsDo
             //   appSecret: "");
 
             //app.UseGoogleAuthentication();
+
+            var options = new LinkedInAuthenticationOptions
+            {
+                ClientId = "77o4y1lexxk1hy",
+                ClientSecret = "VwyJvmH2Z9HKY16C"
+            };
+            app.UseLinkedInAuthentication(options);
+
         }
     }
 }

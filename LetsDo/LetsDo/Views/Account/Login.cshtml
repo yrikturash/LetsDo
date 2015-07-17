@@ -1,4 +1,5 @@
-﻿@model LetsDo.DTO.ViewModels.LoginViewModel
+﻿@using LetsDo.DTO.ViewModels
+@model LetsDo.DTO.ViewModels.LoginViewModel
 
 @{
     ViewBag.Title = "Log in";
@@ -49,7 +50,7 @@
     </div>
     <div class="col-md-4">
         <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new { Action = "ExternalLogin", ReturnUrl = ViewBag.ReturnUrl })
+            @Html.Partial("_ExternalLoginsListPartial",new ExternalLoginViewModel() { Action = "ExternalLogin", ReturnUrl = ViewBag.ReturnUrl })
         </section>
     </div>
 </div>
