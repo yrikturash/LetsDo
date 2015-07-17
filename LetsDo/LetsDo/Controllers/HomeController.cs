@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using LetsDo.DataAccess;
 using LetsDo.DataAccess.Entities;
 using LetsDo.DTO.ViewModels;
-using Microsoft.Ajax.Utilities;
 
 namespace LetsDo.Controllers
 {
@@ -20,6 +19,8 @@ namespace LetsDo.Controllers
         {
             _unitOfWork = new UnitOfWork();
         }
+
+        [HttpGet]
         public ActionResult Index(int? categoryId = null)
         {
                 var issues = (categoryId.HasValue) ?                     
@@ -41,6 +42,8 @@ namespace LetsDo.Controllers
             });
         }
 
+
+        [HttpPost]
         public JsonResult AddNewIssue(string Text, int? CategoryId)
         {
             var issue = new Issue()
@@ -63,33 +66,31 @@ namespace LetsDo.Controllers
                 newId = _unitOfWork.Issues.GetAll().First(n => n.Id == maxId && n.CategoryId == CategoryId).Id;
             }
             return Json(new { Id = newId});
-
         }
+
+        [HttpPost]
         public JsonResult AddNewUIssue(int id, string text)
         {
-                var uissue = new UnderIssue()
-                {
-                    Text = text,
-                    IsFinished = false,
-                    IssueId = id
-                };
+            var uissue = new UnderIssue()
+            {
+                Text = text,
+                IsFinished = false,
+                IssueId = id
+            };
 
-                _unitOfWork.UnderIssues.Create(uissue);
+            _unitOfWork.UnderIssues.Create(uissue);
 
-                return Json(_unitOfWork.UnderIssues.GetAll().First(n => n.IssueId == id && n.Id == _unitOfWork.UnderIssues.GetAll().Max(k => k.Id)));
-
+            return Json(_unitOfWork.UnderIssues.GetAll().First(n => n.IssueId == id && n.Id == _unitOfWork.UnderIssues.GetAll().Max(k => k.Id)));
         }
 
+        [HttpGet]
         public JsonResult GetUnderIssues(int id)
         {
-            using (var db = new ApplicationDbContext())
-            {
-                var uissues = _unitOfWork.UnderIssues.GetAll().Where(n => n.IssueId == id).Select(n => new { Text = n.Text, Id = n.Id, IsFinished = n.IsFinished }).ToList();
-                return Json(uissues, JsonRequestBehavior.AllowGet);
-            }
-
+            var uissues = _unitOfWork.UnderIssues.GetAll().Where(n => n.IssueId == id).Select(n => new { Text = n.Text, Id = n.Id, IsFinished = n.IsFinished }).ToList();
+            return Json(uissues, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPut]
         public JsonResult SetDoneIssue(int id)
         {
             var issue = _unitOfWork.Issues.Get(id);
@@ -103,8 +104,9 @@ namespace LetsDo.Controllers
             _unitOfWork.Save();
 
             return Json("ok");
-
         }
+
+        [HttpPut]
         public JsonResult SetDoneUIssue(int id)
         {
                 var issue = _unitOfWork.UnderIssues.Get(id);
@@ -113,8 +115,9 @@ namespace LetsDo.Controllers
                 _unitOfWork.Save();
 
                 return Json("ok");
-
         }
+
+        [HttpPut]
         public JsonResult UnfinishIssue(int id)
         {
                 var issue = _unitOfWork.Issues.Get(id);
@@ -127,8 +130,9 @@ namespace LetsDo.Controllers
 
                 _unitOfWork.Save();
                 return Json("ok");
-
         }
+
+        [HttpPut]
         public JsonResult UnfinishUIssue(int id)
         {
             var issue = _unitOfWork.UnderIssues.Get(id);
@@ -137,8 +141,9 @@ namespace LetsDo.Controllers
             _unitOfWork.Save();
 
             return Json("ok");
-
         }
+
+        [HttpDelete]
         public JsonResult RemoveCompletedIssues(string ids)
         {
             if (ids.ElementAt(ids.Length - 1) == ',')
@@ -153,6 +158,8 @@ namespace LetsDo.Controllers
             _unitOfWork.Save();
             return Json("ok");
         }
+
+        [HttpDelete]
         public JsonResult RemoveCompletedUIssues(string ids)
         {
             if (ids.ElementAt(ids.Length - 1) == ',')
@@ -166,8 +173,9 @@ namespace LetsDo.Controllers
 
             _unitOfWork.Save();
             return Json("ok");
-
         }
+
+        [HttpPost]
         public JsonResult AddCategory(string CategoryName)
         {
             _unitOfWork.Categories.Create(new Category(){Name = CategoryName});
@@ -175,8 +183,9 @@ namespace LetsDo.Controllers
 
             var maxid = _unitOfWork.Categories.GetAll().Max(n => n.Id);
             return Json(new {Id = maxid});
-
         }
+
+        [HttpDelete]
         public JsonResult RemoveCategory(int id)
         {
             var issues = _unitOfWork.Issues.GetAll().Where(n => n.CategoryId == id).ToList();
@@ -190,7 +199,6 @@ namespace LetsDo.Controllers
             _unitOfWork.Save();
 
             return Json("ok");
-
         }
 
     }
