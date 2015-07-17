@@ -10,15 +10,16 @@ namespace LetsDo.DataAccess
 {
     public class UnitOfWork : IDisposable
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext _db = new ApplicationDbContext();
         private IssueRepository _issueRepository;
         private UnderIssueRepository _underIssueRepository;
+        private CategoryRepository _categoryRepository;
 
         public IssueRepository Issues
         {
             get
             {
-                return _issueRepository ?? (_issueRepository = new IssueRepository(db));
+                return _issueRepository ?? (_issueRepository = new IssueRepository(_db));
             }
         }
 
@@ -26,13 +27,18 @@ namespace LetsDo.DataAccess
         {
             get
             {
-                return _underIssueRepository ?? (_underIssueRepository = new UnderIssueRepository(db));
+                return _underIssueRepository ?? (_underIssueRepository = new UnderIssueRepository(_db));
             }
+        }
+
+        public CategoryRepository Categories
+        {
+            get { return _categoryRepository ?? (_categoryRepository = new CategoryRepository(_db)); }
         }
 
         public void Save()
         {
-            db.SaveChanges();
+            _db.SaveChanges();
         }
 
         private bool disposed = false;
@@ -43,7 +49,7 @@ namespace LetsDo.DataAccess
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    _db.Dispose();
                 }
             }
             this.disposed = true;

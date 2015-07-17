@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LetsDo.DataAccess.Entities;
 
 namespace LetsDo.DTO.ViewModels
 {
