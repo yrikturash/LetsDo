@@ -184,12 +184,26 @@ $("body").on("click", "#uIssue_list li input", function () {
 
 
     //if we finish all then finish main task/issue
-
     var finishedUIssues = $('#uIssue_list li input:checked').length;
-    var unfinishedUIssues = $('#uIssue_list li:not(input:checked)').length;
-    if (finishedUIssues == unfinishedUIssues) {
+    var unfinishedUIssues = $('#uIssue_list li input:not(:checked)').length;
+    if (unfinishedUIssues === 0) {
         var selectedIssueId = $('#issue_list li.active').data('id');
         $('#issue_list li[data-id=' + selectedIssueId + '] input').click();
+    }
+
+    //if we unfinish one underisuue when all was finished, then unfinish parent isuue
+    if (finishedUIssues + 1 === finishedUIssues + unfinishedUIssues) {
+        var issueId = $('#issue_list li.active').data('id');
+
+        var isuueLi = $('#issue_list li[data-id=' + issueId + ']');
+        $('#issue_list li[data-id=' + issueId + '] input').prop("checked", "");
+        isuueLi.removeClass('disabled');
+        /*--------- Animate finish action ----------------*/
+        var $this = isuueLi,
+        callback = function () {
+            $this.insertAfter($this.siblings(':first-child'));
+        };
+        isuueLi.slideUp(500, callback).slideDown(500);
     }
 
     //--------------- if not disabled ------------------
@@ -239,9 +253,9 @@ $("body").on("click", "#uIssue_list li input", function () {
         /*------------ Do changes in database --------------*/
         $.ajax({
             cache: false,
-            type: "GET",
+            type: "PUT",
             url: '/Home/UnfinishUIssue',
-            data: { 'id': id },
+            data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
 

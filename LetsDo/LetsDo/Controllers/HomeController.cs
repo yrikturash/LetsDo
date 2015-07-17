@@ -31,7 +31,7 @@ namespace LetsDo.Controllers
             IList<UnderIssue> uIssuesList = new List<UnderIssue>();
             if (issues.Count > 0)
             {
-                var id = issues.First().Id;
+                var id = issues.OrderBy(n=>n.IsFinished).First().Id;
                 uIssuesList = _unitOfWork.UnderIssues.GetAll().Where(n => n.IssueId == id).ToList();
             }
             return View(new IndexViewModel()
@@ -138,9 +138,17 @@ namespace LetsDo.Controllers
         [HttpPut]
         public JsonResult UnfinishUIssue(int id)
         {
-            var issue = _unitOfWork.UnderIssues.Get(id);
-            issue.IsFinished = false;
-                
+            var uIssue = _unitOfWork.UnderIssues.Get(id);
+            uIssue.IsFinished = false;
+
+            //if parent issue was finished do it unfinished
+            var issue = _unitOfWork.Issues.Get(uIssue.IssueId);
+            if (issue.IsFinished)
+            {
+                issue.IsFinished = false;
+            }
+            
+
             _unitOfWork.Save();
 
             return Json("ok");

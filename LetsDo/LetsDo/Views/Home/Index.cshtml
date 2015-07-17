@@ -141,14 +141,14 @@
                         {
                             <li class="list-group-item row" data-id="@item.Id">
                                 <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span>
-                                <label class="col-md-10"><input type="checkbox">@item.Text</label>
+                                <label class="col-md-10"><input type="checkbox"> @item.Text</label>
                             </li>
                         }
                         @foreach (var item in Model.UnderIssues.Where(n => n.IsFinished))
                         {
                             <li class="list-group-item row disabled" data-id="@item.Id">
                                 <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span>
-                                <label class="col-md-10"><input type="checkbox">@item.Text</label>
+                                <label class="col-md-10"><input type="checkbox" checked> @item.Text</label>
                             </li>
                         }
                     </ul>
