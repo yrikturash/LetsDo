@@ -119,14 +119,14 @@
                         @foreach (var item in Model.Issues.Where(n => !n.IsFinished))
                         {
                             <li class="row list-group-item" data-id="@item.Id">
-                                <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span><span class="col-md-6"><input type="checkbox" /> @item.Text </span><span class="col-md-3">@if (item.CreatedTime != null)
+                                <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span><span class="col-md-5"><input type="checkbox" /> @item.Text </span><span class="col-md-4">@if (item.CreatedTime != null)
                                 {@item.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm")}</span><span class="col-md-2">@if (@item.Category !=  null){@item.Category.Name}</span><span class="badge pull-right">0</span>
                             </li>
                         }
                         @foreach (var item in Model.Issues.Where(n => n.IsFinished))
                         {
                             <li class="row list-group-item disabled" data-id="@item.Id">
-                                <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span><span class="col-md-6"><input type="checkbox" checked /> @item.Text </span><span class="col-md-3">
+                                <span class="glyphicon glyphicon-option-vertical pull-left move" aria-hidden="true"></span><span class="col-md-5"><input type="checkbox" checked /> @item.Text </span><span class="col-md-4">
                                     @if (item.CreatedTime != null)
                                     {@item.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm")}
                             </span><span class="col-md-2">@if (@item.Category != null){@item.Category.Name}</span><span class="badge pull-right">0</span>
@@ -166,15 +166,15 @@
     /*--------------------------- Add new issues & save to db----------------------------------------*/
     $("body").on("click", "#add_btn", function () {
 
-        
+
         var text = $('#issue_input').val();
         $('#issue_input').val("");
 
         $.ajax({
-            url: '/Home/AddNewIssue',
-            data: JSON.stringify({ 'Text': text, 'CategoryId':@if(@Model.ActiveCategoryId == null){@Html.Raw("1")}else{@Model.ActiveCategoryId}}),
+            url: '/api/issues/AddIssue?text=' + text + '&categoryId=@if(@Model.ActiveCategoryId != null){@Model.ActiveCategoryId}',
+            //data: JSON.stringify({ 'text': text, 'categoryId':@if(@Model.ActiveCategoryId == null){@Html.Raw("1")}else{@Model.ActiveCategoryId}}),
             type: 'POST',
-            contentType: 'application/json; charset=utf-8',
+            contentType: 'application/json',
             complete: function () {
 
 
@@ -189,7 +189,7 @@
 
                 $('<li/>', {
                     'class': 'row list-group-item',
-                    'data-id':data.Id
+                    'data-id': data.Id
                 }).prependTo('#issue_list').prepend("<span class='glyphicon glyphicon-option-vertical pull-left move'' aria-hidden='true'></span><span class='col-md-6'><input type='checkbox'/> " + text + "</span><span class='col-md-3'>" + time + "</span><span class='col-md-2'>" + categoryName + "</span><span class='badge pull-right'>0</span>");
 
                 $('#issue_list li:first').click();

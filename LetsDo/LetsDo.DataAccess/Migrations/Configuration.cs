@@ -1,3 +1,5 @@
+using LetsDo.DataAccess.Entities;
+
 namespace LetsDo.DataAccess.Migrations
 {
     using System;
@@ -26,6 +28,13 @@ namespace LetsDo.DataAccess.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+
+            //context.Categories.AddOrUpdate(
+            //  p => p.Name,
+            //  new Category() { Id = 1, Name = "Everythink" }
+            //);
+            
         }
     }
 }

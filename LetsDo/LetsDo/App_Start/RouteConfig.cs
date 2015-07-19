@@ -14,6 +14,11 @@ namespace LetsDo
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional }
             );
+
+
+
+            //enable attribute routing
+            routes.MapMvcAttributeRoutes();
         }
     }
 }

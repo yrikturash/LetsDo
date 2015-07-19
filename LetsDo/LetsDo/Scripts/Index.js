@@ -27,25 +27,25 @@
         $('#uissue_input').val("");
         var id = $('#issue_list li.active').first().data('id');
 
-        console.log('id ' + id);
-        
+        //console.log('id ' + id);
+
         $.ajax({
-            url: '/Home/AddNewUIssue',
-            data: JSON.stringify({ 'id': id, 'text': text }),
+            url: '/api/issues/AddNewUIssue?id=' + id + '&text=' + text,
+            //data: JSON.stringify({ 'id': id, 'text': text }),
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            complete: function () {
+            complete: function() {
 
 
             },
-            success: function (data) {
+            success: function(data) {
 
                 $('<li/>', {
                     'class': 'list-group-item row',
                     'data-id': data.Id
                 }).appendTo('#uIssue_list').append("<span class='glyphicon glyphicon-option-vertical pull-left move' aria-hidden='true'></span><label class='col-md-10'><input type='checkbox' /> " + data.Text + "</label>");
             },
-            error: function (error) {
+            error: function(error) {
             }
         });
     });
@@ -69,7 +69,7 @@ $("body").on("click", "#issue_list li", function (e) {
     $.ajax({
         cache: false,
         type: "GET",
-        url: '/Home/GetUnderIssues',
+        url: '/api/issues/GetUnderIssues',
         data: { 'id': id },
         contentType: 'application/json; charset=utf-8',
         complete: function () {
@@ -127,8 +127,8 @@ $("body").on("click", "#issue_list li input", function () {
         $.ajax({
             cache: false,
             type: "PUT",
-            url: '/Home/SetDoneIssue',
-            data: JSON.stringify({ 'id': id }),
+            url: '/api/issues/SetDoneIssue?id=' + id,
+            //data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
                 $('#uIssue_list').empty();
@@ -158,7 +158,7 @@ $("body").on("click", "#issue_list li input", function () {
         $.ajax({
             cache: false,
             type: "PUT",
-            url: '/Home/UnfinishIssue',
+            url: '/api/issues/UnfinishIssue',
             data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
@@ -222,10 +222,9 @@ $("body").on("click", "#uIssue_list li input", function () {
 
         /*------------ Do changes in database --------------*/
         $.ajax({
-            cache: false,
             type: "PUT",
-            url: '/Home/SetDoneUIssue',
-            data: JSON.stringify({ 'id': id }),
+            url: '/api/issues/SetDoneUIssue?id='+id,
+            //data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
 
@@ -254,8 +253,8 @@ $("body").on("click", "#uIssue_list li input", function () {
         $.ajax({
             cache: false,
             type: "PUT",
-            url: '/Home/UnfinishUIssue',
-            data: JSON.stringify({ 'id': id }),
+            url: '/api/issues/UnfinishUIssue?id='+id,
+            //data: JSON.stringify({ 'id': id }),
             contentType: 'application/json; charset=utf-8',
             complete: function () {
 
@@ -283,8 +282,8 @@ $("body").on("click", "#remove_completed", function () {
     });
 
     $.ajax({
-        url: '/Home/RemoveCompletedIssues',
-        data: JSON.stringify({ 'ids': ids }),
+        url: '/api/issues/RemoveCompletedIssues?ids=' + ids,
+        //data: JSON.stringify({ 'ids': ids }),
         type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         complete: function () {
@@ -308,8 +307,8 @@ $("body").on("click", "#remove_completed2", function () {
     });
 
     $.ajax({
-        url: '/Home/RemoveCompletedUIssues',
-        data: JSON.stringify({ 'ids': ids }),
+        url: '/api/issues/RemoveCompletedUIssues?ids=' + ids,
+        //data: JSON.stringify({ 'ids': ids }),
         type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         complete: function () {
@@ -330,16 +329,16 @@ $("body").on("click", "#add_category_btn", function () {
 
 
     $.ajax({
-        url: '/Home/AddCategory',
-        data: JSON.stringify({ 'CategoryName': category }),
+        url: '/api/issues/AddCategory?categoryName='+category,
+        //data: { 'categoryName': category },
         type: 'POST',
-        contentType: 'application/json; charset=utf-8',
+        contentType: 'application/json',
         complete: function () {
 
         },
         success: function (data) {
             $('#list-all').after("<li class='accepts-issues ui-droppable'><input type='radio' name='list_id' value='all' checked='checked'>" +
-                "<a href='#'>" +
+                "<a href='/Home/Index?categoryId=" + data.Id+ "'>" +
                 "<i class='icon-list'></i> " + category +
                 "<span class='glyphicon glyphicon-remove pull-right remove_category' data-id='" + data.Id + "'style='margin-top: 10px' aria-hidden='true'></span>" +
                 "</a></li>");
@@ -355,8 +354,8 @@ $("body").on("click", ".remove_category", function (e) {
     console.log('remove');
 
     $.ajax({
-        url: '/Home/RemoveCategory',
-        data: JSON.stringify({ 'id': id }),
+        url: '/api/issues/RemoveCategory?id='+id,
+        //data: JSON.stringify({ 'id': id }),
         type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         complete: function () {
